@@ -1472,6 +1472,8 @@
                         if (foundMb52Rows.length > 0) {
                             let htmlRows = '';
                             let totalUnrestricted = 0;
+                            let maxUnrestrictedQty = -1;
+                            let selectedBin = '';
                             
                             foundMb52Rows.forEach(item => {
                                 const row = item.row;
@@ -1497,10 +1499,19 @@
                                         <div class="font-bold text-teal-950">${unrestrictedStr}</div>
                                     </div>
                                 `;
-                                if (binAsalInput && bin !== '-' && bin !== '') {
-                                    binAsalInput.value = bin; 
+                                
+                                // Pilih BIN yang memiliki stok unrestricted terbesar sebagai default BIN Asal (perbaikan sampling case)
+                                if (bin && bin !== '-' && bin !== '') {
+                                    if (unrestrictedQty > maxUnrestrictedQty) {
+                                        maxUnrestrictedQty = unrestrictedQty;
+                                        selectedBin = bin;
+                                    }
                                 }
                             });
+
+                            if (binAsalInput && selectedBin !== '') {
+                                binAsalInput.value = selectedBin;
+                            }
 
                             mb52RowsContainer.innerHTML = htmlRows;
                             mb52TotalUnrestricted.textContent = totalUnrestricted.toLocaleString('id-ID');
